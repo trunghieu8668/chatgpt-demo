@@ -179,36 +179,42 @@ export default () => {
 
   return (
     <div my-6>
-      <SystemRoleSettings
-        canEdit={() => messageList().length === 0}
-        systemRoleEditing={systemRoleEditing}
-        setSystemRoleEditing={setSystemRoleEditing}
-        currentSystemRoleSettings={currentSystemRoleSettings}
-        setCurrentSystemRoleSettings={setCurrentSystemRoleSettings}
-      />
+      <div hidden>
+        <SystemRoleSettings
+          canEdit={() => messageList().length === 0}
+          systemRoleEditing={systemRoleEditing}
+          setSystemRoleEditing={setSystemRoleEditing}
+          currentSystemRoleSettings={currentSystemRoleSettings}
+          setCurrentSystemRoleSettings={setCurrentSystemRoleSettings}
+        />
+      </div>
       <Index each={messageList()}>
         {(message, index) => (
           <MessageItem
             role={message().role}
             message={message().content}
-            showRetry={() => (message().role === 'assistant' && index === messageList().length - 1)}
+            showRetry={() =>
+              message().role === "assistant"
+              && index === messageList().length - 1
+            }
             onRetry={retryLastFetch}
           />
         )}
       </Index>
       {currentAssistantMessage() && (
-        <MessageItem
-          role="assistant"
-          message={currentAssistantMessage}
-        />
+        <MessageItem role="assistant" message={currentAssistantMessage} />
       )}
-      { currentError() && <ErrorMessageItem data={currentError()} onRetry={retryLastFetch} /> }
+      {currentError() && (
+        <ErrorMessageItem data={currentError()} onRetry={retryLastFetch} />
+      )}
       <Show
         when={!loading()}
         fallback={() => (
           <div class="gen-cb-wrapper">
             <span>AI is thinking...</span>
-            <div class="gen-cb-stop" onClick={stopStreamFetch}>Stop</div>
+            <div class="gen-cb-stop" onClick={stopStreamFetch}>
+              Stop
+            </div>
           </div>
         )}
       >
@@ -221,20 +227,29 @@ export default () => {
             autocomplete="off"
             autofocus
             onInput={() => {
-              inputRef.style.height = 'auto'
-              inputRef.style.height = `${inputRef.scrollHeight}px`
+              inputRef.style.height = "auto";
+              inputRef.style.height = `${inputRef.scrollHeight}px`;
             }}
             rows="1"
             class="gen-textarea"
           />
-          <button onClick={handleButtonClick} disabled={systemRoleEditing()} gen-slate-btn>
+          <button
+            onClick={handleButtonClick}
+            disabled={systemRoleEditing()}
+            gen-slate-btn
+          >
             Send
           </button>
-          <button title="Clear" onClick={clear} disabled={systemRoleEditing()} gen-slate-btn>
+          <button
+            title="Clear"
+            onClick={clear}
+            disabled={systemRoleEditing()}
+            gen-slate-btn
+          >
             <IconClear />
           </button>
         </div>
       </Show>
     </div>
-  )
+  );
 }
